@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface SeyahatRepository extends JpaRepository<Seyahat, Long> {
 
-    List<Seyahat> findAllByNeredenIdAndNereyeId(Long nereden, Long nereye);
+    List<Seyahat> findAllByNeredenIdAndNereyeIdAndYayinda(Long nereden, Long nereye, Boolean yayinda);
 
 }

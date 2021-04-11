@@ -64,7 +64,8 @@ public class SeyahatServiceImpl implements SeyahatService{
 
     @Override
     public ResponseEntity<AraResponse> ara(Long nereden, Long nereye) {
-        List<Seyahat> seyahatList = seyahatRepository.findAllByNeredenIdAndNereyeId(nereden, nereye);
+        List<Seyahat> seyahatList = seyahatRepository
+                .findAllByNeredenIdAndNereyeIdAndYayinda(nereden, nereye, Boolean.TRUE);
         List<SeyahatDto> seyahatDtoList = new ArrayList<>();
         for (Seyahat seyahat:seyahatList) {
             seyahatDtoList.add(SeyahatDto.builder()
