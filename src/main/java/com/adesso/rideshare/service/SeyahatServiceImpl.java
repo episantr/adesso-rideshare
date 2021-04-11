@@ -98,7 +98,7 @@ public class SeyahatServiceImpl implements SeyahatService{
     public ResponseEntity<KatilResponse> katil(SeyahatDto seyahatDto) {
         Optional<Seyahat> seyahatOptional = seyahatRepository.findById(seyahatDto.getId());
 
-        if (seyahatOptional.isPresent()) {
+        if (seyahatOptional.isPresent() && seyahatOptional.get().getYayinda() == Boolean.TRUE) {
             Seyahat seyahat = seyahatOptional.get();
             Integer koltukSayisi = seyahat.getKoltukSayisi();
 
