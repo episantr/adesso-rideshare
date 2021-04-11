@@ -1,5 +1,7 @@
 package com.adesso.rideshare.service;
 
+import com.adesso.rideshare.exception.SeyahatNotFoundException;
+import com.adesso.rideshare.exception.TumKoltuklarDoluException;
 import com.adesso.rideshare.model.Seyahat;
 import com.adesso.rideshare.repo.SehirRepository;
 import com.adesso.rideshare.repo.SeyahatRepository;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SeyahatServiceImpl implements SeyahatService{
@@ -44,22 +47,32 @@ public class SeyahatServiceImpl implements SeyahatService{
 
     @Override
     public ResponseEntity<YayinaAlResponse> yayinaAl(SeyahatDto seyahatDto) {
-        Seyahat seyahat = seyahatRepository.findById(seyahatDto.getId())
-                .orElseThrow();
-        seyahat.setYayinda(Boolean.TRUE);
-        seyahat = seyahatRepository.save(seyahat);
-        SeyahatDto output = SeyahatDto.builder().id(seyahat.getId()).build();
-        return ResponseEntity.ok(new YayinaAlResponse(output));
+        Optional<Seyahat> seyahatOptional = seyahatRepository.findById(seyahatDto.getId());
+
+        if (seyahatOptional.isPresent()) {
+            Seyahat seyahat = seyahatOptional.get();
+            seyahat.setYayinda(Boolean.TRUE);
+            seyahat = seyahatRepository.save(seyahat);
+            SeyahatDto output = SeyahatDto.builder().id(seyahat.getId()).build();
+            return ResponseEntity.ok(new YayinaAlResponse(output));
+        } else {
+            throw new SeyahatNotFoundException("Seyahat bulunamadi! id: " + seyahatDto.getId());
+        }
     }
 
     @Override
     public ResponseEntity<YayindanKaldirResponse> yayindanKaldir(SeyahatDto seyahatDto) {
-        Seyahat seyahat = seyahatRepository.findById(seyahatDto.getId())
-                .orElseThrow();
-        seyahat.setYayinda(Boolean.FALSE);
-        seyahat = seyahatRepository.save(seyahat);
-        SeyahatDto output = SeyahatDto.builder().id(seyahat.getId()).build();
-        return ResponseEntity.ok(new YayindanKaldirResponse(output));
+        Optional<Seyahat> seyahatOptional = seyahatRepository.findById(seyahatDto.getId());
+
+        if (seyahatOptional.isPresent()) {
+            Seyahat seyahat = seyahatOptional.get();
+            seyahat.setYayinda(Boolean.FALSE);
+            seyahat = seyahatRepository.save(seyahat);
+            SeyahatDto output = SeyahatDto.builder().id(seyahat.getId()).build();
+            return ResponseEntity.ok(new YayindanKaldirResponse(output));
+        } else {
+            throw new SeyahatNotFoundException("Seyahat bulunamadi! id: " + seyahatDto.getId());
+        }
     }
 
     @Override
@@ -83,18 +96,24 @@ public class SeyahatServiceImpl implements SeyahatService{
 
     @Override
     public ResponseEntity<KatilResponse> katil(SeyahatDto seyahatDto) {
-        Seyahat seyahat = seyahatRepository.findById(seyahatDto.getId())
-                .orElseThrow();
-        Integer koltukSayisi = seyahat.getKoltukSayisi();
+        Optional<Seyahat> seyahatOptional = seyahatRepository.findById(seyahatDto.getId());
 
-        if (koltukSayisi > 0) {
-            seyahat.setKoltukSayisi(koltukSayisi - 1);
+        if (seyahatOptional.isPresent()) {
+            Seyahat seyahat = seyahatOptional.get();
+            Integer koltukSayisi = seyahat.getKoltukSayisi();
+
+            if (koltukSayisi > 0) {
+                seyahat.setKoltukSayisi(koltukSayisi - 1);
+            } else {
+                throw new TumKoltuklarDoluException("Bu seyahatteki tum koltuklar dolu! id: " + seyahatDto.getId());
+            }
+
+            seyahat = seyahatRepository.save(seyahat);
+            SeyahatDto output = SeyahatDto.builder().id(seyahat.getId()).build();
+            return ResponseEntity.ok(new KatilResponse(output));
         } else {
-            return ResponseEntity.badRequest().body(null);
+            throw new SeyahatNotFoundException("Seyahat bulunamadi! id: " + seyahatDto.getId());
         }
 
-        seyahat = seyahatRepository.save(seyahat);
-        SeyahatDto output = SeyahatDto.builder().id(seyahat.getId()).build();
-        return ResponseEntity.ok(new KatilResponse(output));
     }
 }
