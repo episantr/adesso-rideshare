@@ -1,0 +1,71 @@
+###
+POST http://localhost:8080/ride-share/seyahat-ekle
+Content-Type: application/json
+
+{
+  "aciklama": "aascasc",
+  "koltukSayisi": 6,
+  "tarih": "2021-03-01",
+  "nereden": 2,
+  "nereye": 75
+}
+
+###
+POST http://localhost:8080/ride-share/seyahat-ekle
+Content-Type: application/json
+
+{
+  "aciklama": "aascasc",
+  "koltukSayisi": 6,
+  "tarih": "2021-03-01",
+  "nereden": 32,
+  "nereye": 65
+}
+
+
+###
+POST http://localhost:8080/ride-share/seyahat-ekle
+Content-Type: application/json
+
+{
+  "aciklama": "aascasc",
+  "koltukSayisi": 6,
+  "tarih": "2021-03-01",
+  "nereden": 1,
+  "nereye": 200
+}
+
+
+###
+POST http://localhost:8080/ride-share/yayina-al
+Content-Type: application/json
+
+{
+  "id": 201
+}
+
+
+###
+POST http://localhost:8080/ride-share/yayindan-kaldir
+Content-Type: application/json
+
+{
+  "id": 201
+}
+
+###
+POST http://localhost:8080/ride-share/katil
+Content-Type: application/json
+
+{
+  "id": 201
+}
+
+###
+POST http://localhost:8080/ride-share/ara
+Content-Type: application/json
+
+{
+  "nereden": 2,
+  "nereye": 75
+}
